@@ -1,41 +1,50 @@
 package net.jauu.ledspectacle;
 
 import android.support.v7.widget.RecyclerView;
-import android.util.SparseBooleanArray;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.view.View.OnClickListener;
 import android.widget.TextView;
 
 import java.util.List;
 
-public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ListItemViewHolder> {
 
-    private List<Model> items;
-    private SparseBooleanArray selectedItems;
+public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ModeViewHolder> {
 
-    RecyclerViewAdapter(List<Model> modelData) {
-        if (modelData == null) {
+    private List<ModeData> items;
+    private static final String TAG = "RecyclerViewAdapter";
+
+    RecyclerViewAdapter(List<ModeData> aitems) {
+        if (aitems == null) {
             throw new IllegalArgumentException("modelData must not be null");
         }
-        items = modelData;
-        selectedItems = new SparseBooleanArray();
+        items = aitems;
     }
 
     @Override
-    public ListItemViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
-        View itemView = LayoutInflater.
-                from(viewGroup.getContext()).
-                inflate(R.layout.item_demo, viewGroup, false);
-        return new ListItemViewHolder(itemView);
+    public ModeViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
+        View itemView = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_demo, viewGroup, false);
+
+        ModeViewHolder vh = new ModeViewHolder(itemView, new RecyclerViewAdapter.IMyViewHolderClicks() {
+            public void onPotato(View caller) {
+                Log.v(TAG, "View click");
+            }
+            public void onTomato(ImageView callerImage) {
+                Log.v(TAG, callerImage.toString());
+            }
+        });
+
+        return vh;
     }
 
     @Override
-    public void onBindViewHolder(ListItemViewHolder viewHolder, int position) {
-        Model model = items.get(position);
-        viewHolder.name.setText(String.valueOf(model.name));
-        viewHolder.age.setText(String.valueOf(model.age));
-        viewHolder.itemView.setActivated(selectedItems.get(position, false));
+    public void onBindViewHolder(ModeViewHolder viewHolder, int position) {
+        ModeData item = items.get(position);
+        viewHolder.imageView.setImageResource(item.image);
+        viewHolder.textView.setText(item.name);
     }
 
     @Override
@@ -43,14 +52,38 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         return items.size();
     }
 
-    public final static class ListItemViewHolder extends RecyclerView.ViewHolder {
-        TextView name;
-        TextView age;
+    public final static class ModeViewHolder extends RecyclerView.ViewHolder implements OnClickListener {
 
-        public ListItemViewHolder(View itemView) {
+        protected IMyViewHolderClicks mListener;
+        protected ImageView imageView;
+        protected TextView textView;
+
+        public ModeViewHolder(View itemView, IMyViewHolderClicks listener) {
             super(itemView);
-            name = (TextView) itemView.findViewById(R.id.txt_name);
-            age = (TextView) itemView.findViewById(R.id.txt_age);
+
+            mListener = listener;
+
+            imageView = (ImageView) itemView.findViewById(R.id.imageView);
+            imageView.setOnClickListener(this);
+
+            textView = (TextView) itemView.findViewById(R.id.mode_text);
+            textView.setOnClickListener(this);
         }
+
+        @Override
+        public void onClick(View v) {
+            if (v instanceof ImageView) {
+                mListener.onTomato((ImageView) v);
+            } else {
+                mListener.onPotato(v);
+            }
+
+        }
+
+    }
+
+    public static interface IMyViewHolderClicks {
+        public void onPotato(View caller);
+        public void onTomato(ImageView callerImage);
     }
 }

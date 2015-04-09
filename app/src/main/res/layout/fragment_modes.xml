@@ -7,7 +7,8 @@
     android:paddingBottom="0dp"
     android:paddingLeft="0dp"
     android:paddingRight="0dp"
-    android:paddingTop="0dp">
+    android:paddingTop="0dp"
+    android:background="@color/pane_background">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/cardList"
