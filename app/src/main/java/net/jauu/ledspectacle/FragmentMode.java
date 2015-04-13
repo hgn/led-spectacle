@@ -44,10 +44,10 @@ public class FragmentMode extends Fragment {
         recyclerView.setLayoutManager(llm);
 
         ArrayList<ModeData> items = new ArrayList<ModeData>();
-        items.add(new ModeData("Ambient", R.drawable.img_mode_ambient));
-        items.add(new ModeData("Ambient Dynamic", R.drawable.img_mode_ambient_dyn));
-        items.add(new ModeData("Disc", R.drawable.img_mode_disco));
-        items.add(new ModeData("Stollization", R.drawable.img_mode_stoll));
+        items.add(new ModeData("Ambient", R.drawable.img_mode_ambient, "/arduino/mode/ambient"));
+        items.add(new ModeData("Ambient Dynamic", R.drawable.img_mode_ambient_dyn, "/arduino/mode/ambient-dynamic"));
+        items.add(new ModeData("Disco", R.drawable.img_mode_disco, "/arduino/mode/disco"));
+        items.add(new ModeData("Stollzation", R.drawable.img_mode_stoll, "/arduino/mode/disco"));
 
         adapter = new RecyclerViewAdapter(items);
         recyclerView.setAdapter(adapter);

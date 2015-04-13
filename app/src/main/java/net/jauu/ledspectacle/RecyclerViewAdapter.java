@@ -45,6 +45,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         ModeData item = items.get(position);
         viewHolder.imageView.setImageResource(item.image);
         viewHolder.textView.setText(item.name);
+        viewHolder.url_path = item.url_path;
     }
 
     @Override
@@ -56,7 +57,11 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
         protected IMyViewHolderClicks mListener;
         protected ImageView imageView;
+        protected ImageView playButton;
         protected TextView textView;
+        protected String url_path;
+
+        private static final String TAG = "ModeViewHolder";
 
         public ModeViewHolder(View itemView, IMyViewHolderClicks listener) {
             super(itemView);
@@ -66,17 +71,29 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             imageView = (ImageView) itemView.findViewById(R.id.imageView);
             imageView.setOnClickListener(this);
 
+            playButton = (ImageView) itemView.findViewById(R.id.send_icon);
+            playButton.setOnClickListener(this);
+
             textView = (TextView) itemView.findViewById(R.id.mode_text);
             textView.setOnClickListener(this);
+
+            this.setIsRecyclable(false);
         }
 
         @Override
         public void onClick(View v) {
+            String full_url = "http://10.10.10.135" + this.url_path;
+            Log.v(TAG, "full url-path: " + full_url);
+            new RequestTask().execute(full_url);
+
+/*
+
             if (v instanceof ImageView) {
                 mListener.onTomato((ImageView) v);
             } else {
                 mListener.onPotato(v);
             }
+            */
 
         }
 

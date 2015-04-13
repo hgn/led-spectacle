@@ -24,9 +24,9 @@ public class SampleFragmentPagerAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         switch (position) {
             case 0:
-                return new MessagingFragment();
-            case 1:
                 return new FragmentMode();
+            case 1:
+                return new MessagingFragment();
             default:
                 return PageFragment.newInstance(position + 1);
         }
